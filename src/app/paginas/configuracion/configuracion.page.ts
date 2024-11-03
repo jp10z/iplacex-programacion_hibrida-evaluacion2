@@ -10,7 +10,10 @@ import {
   IonLabel,
   IonList,
   IonItem,
+  ToggleChangeEventDetail,
 } from "@ionic/angular/standalone";
+import { IonToggleCustomEvent } from "@ionic/core";
+import { ConfiguracionService } from "src/app/servicios/configuracion.service";
 
 @Component({
   selector: "app-configuracion",
@@ -34,7 +37,18 @@ import {
 export class ConfiguracionPage implements OnInit {
   permitirBorrarCitasEnInicio: boolean = false;
 
-  constructor() {}
+  constructor(private _configuracionService: ConfiguracionService) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.permitirBorrarCitasEnInicio =
+      await this._configuracionService.permitirBorrarCitasEnInicio();
+  }
+
+  onPermitirBorrarCitasEnInicioChange(
+    $event: IonToggleCustomEvent<ToggleChangeEventDetail<any>>
+  ) {
+    this._configuracionService.setPermitirBorrarCitasEnInicio(
+      this.permitirBorrarCitasEnInicio
+    );
+  }
 }

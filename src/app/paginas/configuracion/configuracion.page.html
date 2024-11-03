@@ -13,7 +13,9 @@
 
   <ion-list>
     <ion-item>
-      <ion-toggle>¿Desea poder borrar citas en el inicio (frase aleatoria)?"</ion-toggle>
+      <ion-toggle [(ngModel)]="permitirBorrarCitasEnInicio" (ionChange)="onPermitirBorrarCitasEnInicioChange($event)">
+        ¿Desea poder borrar citas en el inicio (frase aleatoria)?"
+      </ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>
