@@ -33,13 +33,14 @@ export class GestionPage implements OnInit {
 
   constructor(private _citasService: CitasService) {}
 
-  ngOnInit() {
-    this.loadCitas();
+  async ngOnInit() {
+    await this._citasService.initPlugin();
+    await this.loadCitas();
   }
 
-  loadCitas() {
+  async loadCitas() {
     // Función que carga el listado de citas desde el servicio
-    this.citas = this._citasService.getCitas();
+    this.citas = await this._citasService.getCitas();
   }
 
   onCitasChange() {

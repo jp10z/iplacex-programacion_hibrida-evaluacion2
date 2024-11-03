@@ -1,10 +1,10 @@
 <ion-list>
-  <ion-item *ngFor="let cita of citas; track cita; index as index">
+  <ion-item *ngFor="let cita of citas">
     <div class="container">
       <p>{{cita.frase}}</p>
       <p class="autor">{{cita.autor}}</p>
     </div>
-    <ion-button fill="clear" size="large" (click)="deleteCita(index)">
+    <ion-button fill="clear" size="large" (click)="deleteCita(cita.id)">
       <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
     </ion-button>
   </ion-item>

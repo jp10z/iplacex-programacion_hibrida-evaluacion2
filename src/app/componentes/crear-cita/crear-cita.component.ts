@@ -61,15 +61,17 @@ export class CrearCitaComponent implements OnInit, AfterViewInit {
     addIcons({ addOutline });
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    await this._citasService.initPlugin();
+  }
 
   ngAfterViewInit() {
     this.fraseInput.control.markAsTouched();
     this.autorInput.control.markAsTouched();
   }
 
-  addCita() {
-    this._citasService.addCita(this.frase, this.autor);
+  async addCita() {
+    await this._citasService.addCita(this.frase, this.autor);
     this.onCitaCreadaEvent.emit();
   }
 }

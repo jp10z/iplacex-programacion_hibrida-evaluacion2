@@ -1,54 +1,106 @@
 import { Injectable } from "@angular/core";
 import { Cita } from "../modelo/cita";
+import {
+  CapacitorSQLite,
+  SQLiteConnection,
+  SQLiteDBConnection,
+} from "@capacitor-community/sqlite";
+import { Capacitor } from "@capacitor/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class CitasService {
-  // almacenamiento temporal en memoria
-  private _citas: Cita[] = [
-    new Cita(
-      "La forma de empezar es dejar de hablar y empezar a hacer.",
-      "Walt-Disney"
-    ),
-    new Cita(
-      "La vida es lo que sucede cuando estás ocupado haciendo otros planes.",
-      "John Lennon"
-    ),
-    new Cita(
-      "El futuro pertenece a aquellos que creen en la belleza de sus sueños.",
-      "Eleanor Roosevelt"
-    ),
-    new Cita(
-      "Dime y lo olvido. Enséñame y lo recuerdo. Involucrarme y aprendo.",
-      "Benjamin Franklin"
-    ),
-    new Cita(
-      "Si juzgas a las personas, no tienes tiempo para amarlas.",
-      "Madre Teresa"
-    ),
-  ];
+  private sqliteConnection: SQLiteConnection = new SQLiteConnection(
+    CapacitorSQLite
+  );
+  private db!: SQLiteDBConnection;
+  private platform: string = "";
+  private DB_NAME: string = "lista_citas";
+  private DB_ENCRYPT: boolean = false;
+  private DB_MODE: string = "no-encryption";
+  private DB_VERSION: number = 1;
+  private DB_READ_ONLY: boolean = false;
+  private DB_SQL_TABLES: string = `
+    CREATE TABLE IF NOT EXISTS cita (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      frase TEXT NOT NULL,
+      autor TEXT NOT NULL
+    );
+  `;
 
   constructor() {}
 
-  addCita(frase: string, autor: string) {
-    this._citas.push(new Cita(frase, autor));
+  private async _initPluginWeb(): Promise<void> {
+    await customElements.whenDefined("jeep-sqlite");
+    const jeepSqliteEl = document.querySelector("jeep-sqlite");
+    if (jeepSqliteEl !== null) {
+      await this.sqliteConnection.initWebStore();
+    }
   }
 
-  getCitas() {
-    return this._citas;
+  async initPlugin() {
+    this.platform = Capacitor.getPlatform();
+    if (this.platform === "web") {
+      await this._initPluginWeb();
+    }
+    await this._openConnection();
+    await this.db.execute(this.DB_SQL_TABLES);
   }
 
-  getRandomCita() {
-    // Obtiene un numero aleatorio según el largo del array de citas
-    const randomIndex = Math.floor(Math.random() * this._citas.length);
-    console.log("RandomIndex", randomIndex);
-    // Returna el elemento en esa posición
-    return this._citas[randomIndex];
+  private async _openConnection() {
+    const ret = await this.sqliteConnection.checkConnectionsConsistency();
+    const isConn = (
+      await this.sqliteConnection.isConnection(this.DB_NAME, this.DB_READ_ONLY)
+    ).result;
+    if (ret.result && isConn) {
+      this.db = await this.sqliteConnection.retrieveConnection(
+        this.DB_NAME,
+        this.DB_READ_ONLY
+      );
+    } else {
+      this.db = await this.sqliteConnection.createConnection(
+        this.DB_NAME,
+        this.DB_ENCRYPT,
+        this.DB_MODE,
+        this.DB_VERSION,
+        this.DB_READ_ONLY
+      );
+    }
+    await this.db.open();
   }
 
-  deleteCita(index: number) {
-    // Elimina una cita según el indice especificado
-    this._citas.splice(index, 1);
+  async _seedData(): Promise<void> {
+    // Inicializa la base de datos con información inicial
+    await this.addCita(
+      "La forma de empezar es dejar de hablar y empezar a hacer.",
+      "Walt-Disney"
+    );
+  }
+
+  async addCita(frase: string, autor: string): Promise<void> {
+    const sqlQuery = `INSERT INTO cita (frase, autor) VALUES (?, ?);`;
+    await this.db.run(sqlQuery, [frase, autor]);
+  }
+
+  async getCitas(): Promise<Cita[]> {
+    // Obtiene todas las citas desde la base de datos
+    const sqlQuery = "SELECT id, frase, autor FROM cita;";
+    const result = await this.db.query(sqlQuery);
+    return result?.values ?? [];
+  }
+
+  async getRandomCita(): Promise<Cita | null> {
+    // Obtener una cita desde la base de manera aleatoria
+    const sqlQuery =
+      "SELECT id, frase, autor FROM cita ORDER BY RANDOM() LIMIT 1;";
+    const result = await this.db.query(sqlQuery);
+    return result?.values?.[0] ?? null;
+  }
+
+  async deleteCita(id: number): Promise<void> {
+    // Elimina una cita de la base de datos según el id especificado
+    const sqlQuery = `DELETE FROM cita WHERE id = ?;`;
+    await this.db.run(sqlQuery, [id]);
   }
 }

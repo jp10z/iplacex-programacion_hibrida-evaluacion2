@@ -56,7 +56,8 @@ export class HomePage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.randomCita = this._citasService.getRandomCita();
+  async ngOnInit() {
+    await this._citasService.initPlugin();
+    this.randomCita = await this._citasService.getRandomCita();
   }
 }

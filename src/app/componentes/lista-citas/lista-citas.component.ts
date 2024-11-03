@@ -28,10 +28,12 @@ export class ListaCitasComponent implements OnInit {
     addIcons({ trashOutline });
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    await this._citasService.initPlugin();
+  }
 
-  deleteCita(index: number) {
-    this._citasService.deleteCita(index);
+  async deleteCita(id: number): Promise<void> {
+    await this._citasService.deleteCita(id);
     this.onCitaEliminadaEvent.emit();
   }
 }
