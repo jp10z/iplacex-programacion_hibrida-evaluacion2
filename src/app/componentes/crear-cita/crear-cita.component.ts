@@ -1,6 +1,13 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+  AfterViewInit,
+} from "@angular/core";
+import { FormsModule, NgModel } from "@angular/forms";
 import {
   IonCardHeader,
   IonCardSubtitle,
@@ -39,18 +46,27 @@ import { CitasService } from "src/app/servicios/citas.service";
     IonCardContent,
   ],
 })
-export class CrearCitaComponent implements OnInit {
+export class CrearCitaComponent implements OnInit, AfterViewInit {
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onCitaCreadaEvent = new EventEmitter();
 
   frase: string = "";
   autor: string = "";
 
+  // ngModels del template
+  @ViewChild("fraseInput") fraseInput!: NgModel;
+  @ViewChild("autorInput") autorInput!: NgModel;
+
   constructor(private _citasService: CitasService) {
     addIcons({ addOutline });
   }
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.fraseInput.control.markAsTouched();
+    this.autorInput.control.markAsTouched();
+  }
 
   addCita() {
     this._citasService.addCita(this.frase, this.autor);

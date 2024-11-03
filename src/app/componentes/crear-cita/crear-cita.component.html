@@ -8,18 +8,22 @@
         <ion-input 
           [(ngModel)]="frase"     
           required="required" 
-          minlength="3"
-          label="Cita&nbsp;&nbsp;&nbsp;" />
+          minlength="5"
+          label="Cita&nbsp;&nbsp;&nbsp;"
+          errorText="La frase debe tener al menos 5 carácteres"
+          #fraseInput="ngModel" />
       </ion-item>
       <ion-item>
         <ion-input 
           [(ngModel)]="autor"     
           required="required" 
-          minlength="3"
-          label="Autor" />
+          minlength="2"
+          label="Autor"
+          errorText="El autor debe tener al menos 2 carácteres"
+          #autorInput="ngModel" />
       </ion-item>
     </ion-list>
-    <ion-button fill="clear" class="btn-agregar" (click)="addCita()">
+    <ion-button fill="clear" class="btn-agregar" [disabled]="!fraseInput.valid || !autorInput.valid" (click)="addCita()">
       Agregar
       <ion-icon slot="end" name="add-outline"></ion-icon>
     </ion-button>
