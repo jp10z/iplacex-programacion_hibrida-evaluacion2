@@ -14,6 +14,7 @@ import {
   IonIcon,
   IonFab,
   IonFabButton,
+  IonToast,
 } from "@ionic/angular/standalone";
 import { settingsOutline, addOutline } from "ionicons/icons";
 import { CitaComponent } from "../../componentes/cita/cita.component";
@@ -29,6 +30,7 @@ import { ConfiguracionService } from "src/app/servicios/configuracion.service";
   styleUrls: ["home.page.scss"],
   standalone: true,
   imports: [
+    IonToast,
     IonFab,
     IonFabButton,
     RouterModule,
@@ -53,6 +55,9 @@ export class HomePage implements OnInit {
 
   // Se almacenan configuraciones.
   permitirBorrarCitasEnInicio: boolean = false;
+
+  // Variables usadas por los toast.
+  isToastEliminacionOpen = false;
 
   constructor(
     private _configuracionService: ConfiguracionService,
@@ -84,5 +89,11 @@ export class HomePage implements OnInit {
   async onCitaElimina(): Promise<void> {
     // Función que se llama cuándo el componente hijo (cita aleatoria) hace eliminación.
     await this.ionViewWillEnter();
+    this.setToastEliminacionOpen(true);
+  }
+
+  setToastEliminacionOpen(isOpen: boolean): void {
+    // Setea si el toast que indica una eliminación se debe mostrar.
+    this.isToastEliminacionOpen = isOpen;
   }
 }
