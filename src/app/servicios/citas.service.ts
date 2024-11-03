@@ -45,7 +45,7 @@ export class CitasService {
       await this._initPluginWeb();
     }
     await this._openConnection();
-    await this.db.execute(this.DB_SQL_TABLES);
+    await this._initDatabase();
   }
 
   private async _openConnection() {
@@ -70,28 +70,47 @@ export class CitasService {
     await this.db.open();
   }
 
-  async _seedData(): Promise<void> {
-    // Inicializa la base de datos con información inicial
+  async _initDatabase(): Promise<void> {
+    // Función que inicializa la base de datos en caso de que no se haya inicializado aún.
+    // La siguiente consulta es para validar si la tabla cita existe o no.
+    const sqlQuery =
+      "SELECT name FROM sqlite_master WHERE type='table' AND name='cita';";
+    const result = await this.db.query(sqlQuery);
+    // Si existe entonces que haga retorno anticipado y no haga nada.
+    if (result && Array.isArray(result.values) && result.values.length > 0)
+      return;
+    // Si existe entonces que cree la tabla y haga seed de datos iniciales.
+    await this.db.execute(this.DB_SQL_TABLES);
+    // Seeds
     await this.addCita(
       "La forma de empezar es dejar de hablar y empezar a hacer.",
       "Walt-Disney"
     );
+    await this.addCita(
+      "La vida es lo que sucede cuando estás ocupado haciendo otros planes.",
+      "John Lennon"
+    );
+    await this.addCita(
+      "No importa lo lento que vayas mientras no te detengas.",
+      "Confucio"
+    );
   }
 
   async addCita(frase: string, autor: string): Promise<void> {
+    // Agrega una cita a la base de datos.
     const sqlQuery = `INSERT INTO cita (frase, autor) VALUES (?, ?);`;
     await this.db.run(sqlQuery, [frase, autor]);
   }
 
   async getCitas(): Promise<Cita[]> {
-    // Obtiene todas las citas desde la base de datos
+    // Obtiene un array con todas las citas desde la base de datos.
     const sqlQuery = "SELECT id, frase, autor FROM cita;";
     const result = await this.db.query(sqlQuery);
     return result?.values ?? [];
   }
 
   async getRandomCita(): Promise<Cita | null> {
-    // Obtener una cita desde la base de manera aleatoria
+    // Obtener una cita desde la base de manera aleatoria.
     const sqlQuery =
       "SELECT id, frase, autor FROM cita ORDER BY RANDOM() LIMIT 1;";
     const result = await this.db.query(sqlQuery);
@@ -99,7 +118,7 @@ export class CitasService {
   }
 
   async deleteCita(id: number): Promise<void> {
-    // Elimina una cita de la base de datos según el id especificado
+    // Elimina una cita de la base de datos según el id especificado.
     const sqlQuery = `DELETE FROM cita WHERE id = ?;`;
     await this.db.run(sqlQuery, [id]);
   }

@@ -47,9 +47,11 @@ import { addIcons } from "ionicons";
   ],
 })
 export class HomePage implements OnInit {
+  // Acá se almacena la cita aleatoria obtenida.
   randomCita: Cita | null = null;
 
   constructor(private _citasService: CitasService) {
+    // Registrar iconos.
     addIcons({
       settingsOutline,
       addOutline,
@@ -57,7 +59,9 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit() {
+    // Al momento de inicializar la página se llama al servicio de citas para que se inicialice.
     await this._citasService.initPlugin();
+    // Obtiene una cita aleatoria desde el servicio.
     this.randomCita = await this._citasService.getRandomCita();
   }
 }

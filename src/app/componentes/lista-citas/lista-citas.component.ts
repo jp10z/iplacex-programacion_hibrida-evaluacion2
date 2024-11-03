@@ -6,34 +6,43 @@ import {
   IonList,
   IonIcon,
   IonButton,
+  IonToast,
 } from "@ionic/angular/standalone";
 import { Cita } from "src/app/modelo/cita";
 import { CitasService } from "src/app/servicios/citas.service";
 import { addIcons } from "ionicons";
 import { trashOutline } from "ionicons/icons";
+import { ListaCitasItemComponent } from "../lista-citas-item/lista-citas-item.component";
 
 @Component({
   selector: "app-lista-citas",
   templateUrl: "./lista-citas.component.html",
   styleUrls: ["./lista-citas.component.scss"],
   standalone: true,
-  imports: [IonIcon, CommonModule, IonItem, IonLabel, IonList, IonButton],
+  imports: [
+    IonToast,
+    IonIcon,
+    CommonModule,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonButton,
+    ListaCitasItemComponent,
+  ],
 })
-export class ListaCitasComponent implements OnInit {
+export class ListaCitasComponent {
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onCitaEliminadaEvent = new EventEmitter();
   @Input() citas: Cita[] = [];
 
   constructor(private _citasService: CitasService) {
+    // Registrar iconos
     addIcons({ trashOutline });
   }
 
-  async ngOnInit() {
-    await this._citasService.initPlugin();
-  }
-
-  async deleteCita(id: number): Promise<void> {
-    await this._citasService.deleteCita(id);
+  onCitaEliminada(): void {
+    // Función que se llama cuándo un componente item hijo ejecuta una eliminación.
+    // Esta en cadena hace otra emisión para que la página padre recargue el listado de citas.
     this.onCitaEliminadaEvent.emit();
   }
 }

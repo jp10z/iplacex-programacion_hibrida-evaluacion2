@@ -11,6 +11,9 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-crear-cita (onCitaCreadaEvent)="onCitasChange()"></app-crear-cita>
-  <app-lista-citas [citas]="citas" (onCitaEliminadaEvent)="onCitasChange()"></app-lista-citas>
+  <app-crear-cita (onCitaCreadaEvent)="onCitaCreada()"></app-crear-cita>
+  <app-lista-citas [citas]="citas" (onCitaEliminadaEvent)="onCitaEliminada()"></app-lista-citas>
 </ion-content>
+
+<ion-toast message="Cita agregada." [isOpen]="isToastCreacionOpen" (didDismiss)="setToastCreacionOpen(false)" [duration]="3000"></ion-toast>
+<ion-toast message="Cita eliminada." [isOpen]="isToastEliminacionOpen" (didDismiss)="setToastEliminacionOpen(false)" [duration]="3000"></ion-toast>

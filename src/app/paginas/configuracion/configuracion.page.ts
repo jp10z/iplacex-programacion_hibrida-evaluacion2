@@ -35,11 +35,13 @@ import { ConfiguracionService } from "src/app/servicios/configuracion.service";
   ],
 })
 export class ConfiguracionPage implements OnInit {
+  // Variable usada por el formulario (toggle).
   permitirBorrarCitasEnInicio: boolean = false;
 
   constructor(private _configuracionService: ConfiguracionService) {}
 
   async ngOnInit() {
+    // Carga las configuraciones desde el servicio y la setea en la variable.
     this.permitirBorrarCitasEnInicio =
       await this._configuracionService.permitirBorrarCitasEnInicio();
   }
@@ -47,6 +49,8 @@ export class ConfiguracionPage implements OnInit {
   onPermitirBorrarCitasEnInicioChange(
     $event: IonToggleCustomEvent<ToggleChangeEventDetail<any>>
   ) {
+    // Función que se llama cuándo se cambia el valor del toggle.
+    // Esta llama al servicio de configuración para que setee el valor actual y lo guarde.
     this._configuracionService.setPermitirBorrarCitasEnInicio(
       this.permitirBorrarCitasEnInicio
     );

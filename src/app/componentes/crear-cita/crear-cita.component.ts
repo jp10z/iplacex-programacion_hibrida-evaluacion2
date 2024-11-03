@@ -46,32 +46,37 @@ import { CitasService } from "src/app/servicios/citas.service";
     IonCardContent,
   ],
 })
-export class CrearCitaComponent implements OnInit, AfterViewInit {
+export class CrearCitaComponent implements AfterViewInit {
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onCitaCreadaEvent = new EventEmitter();
 
+  // Variables usadas por el formulario.
   frase: string = "";
   autor: string = "";
 
-  // ngModels del template
+  // ngModels del template.
   @ViewChild("fraseInput") fraseInput!: NgModel;
   @ViewChild("autorInput") autorInput!: NgModel;
 
   constructor(private _citasService: CitasService) {
+    // Registrar iconos.
     addIcons({ addOutline });
   }
 
-  async ngOnInit() {
-    await this._citasService.initPlugin();
-  }
-
   ngAfterViewInit() {
+    // Se ejecuta después de inicializa la vista.
+    // Marca los inputs del formulario como tocados para que se muestren sus errores inmediatamente.
     this.fraseInput.control.markAsTouched();
     this.autorInput.control.markAsTouched();
   }
 
   async addCita() {
+    // Llama al servico para que este agregue la cita segun los datos del formulario.
     await this._citasService.addCita(this.frase, this.autor);
+    // Emite una señal para indicarle al padre que se creó una cita.
     this.onCitaCreadaEvent.emit();
+    // Limpia los datos del formulario.
+    this.frase = "";
+    this.autor = "";
   }
 }

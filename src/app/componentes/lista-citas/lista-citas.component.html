@@ -1,11 +1,11 @@
 <ion-list>
-  <ion-item *ngFor="let cita of citas">
-    <div class="container">
-      <p>{{cita.frase}}</p>
-      <p class="autor">{{cita.autor}}</p>
-    </div>
-    <ion-button fill="clear" size="large" (click)="deleteCita(cita.id)">
-      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-    </ion-button>
-  </ion-item>
+  <ng-container *ngFor="let cita of citas">
+    <app-lista-citas-item
+      [id]="cita.id"
+      [frase]="cita.frase"
+      [autor]="cita.autor"
+      (onCitaEliminadaEvent)="onCitaEliminada()">
+    </app-lista-citas-item>
+  </ng-container>
 </ion-list>
+<ion-toast trigger="btn-agregar" message="Cita agregada." [duration]="3000"></ion-toast>
