@@ -42,6 +42,11 @@ export class ConfiguracionPage implements OnInit {
 
   async ngOnInit() {
     // Carga las configuraciones desde el servicio y la setea en la variable.
+    this.ionViewWillEnter();
+  }
+
+  async ionViewWillEnter() {
+    // Obtiene el valor de las configuraciones al momento de entrar a la página.
     this.permitirBorrarCitasEnInicio =
       await this._configuracionService.permitirBorrarCitasEnInicio();
   }

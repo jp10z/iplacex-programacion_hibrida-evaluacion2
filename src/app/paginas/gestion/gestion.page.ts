@@ -44,6 +44,13 @@ export class GestionPage implements OnInit {
     // Al inicializar la página que se inicialice el plugin del servicio de citas.
     await this._citasService.initPlugin();
     // Luego que cargue el listado de citas.
+    await this.ionViewWillEnter();
+  }
+
+  async ionViewWillEnter() {
+    // Obtiene el listado de citas desde el servicio al momento de entrar a la página.
+    // Solamente se llama si el servicio de citas ya fue inicializado.
+    if (!this._citasService.inicializado) return;
     await this.loadCitas();
   }
 

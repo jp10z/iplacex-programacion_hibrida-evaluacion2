@@ -21,6 +21,7 @@ import { CitasService } from "src/app/servicios/citas.service";
 import { Cita } from "src/app/modelo/cita";
 import { RouterModule } from "@angular/router";
 import { addIcons } from "ionicons";
+import { ConfiguracionService } from "src/app/servicios/configuracion.service";
 
 @Component({
   selector: "app-home",
@@ -50,7 +51,13 @@ export class HomePage implements OnInit {
   // Acá se almacena la cita aleatoria obtenida.
   randomCita: Cita | null = null;
 
-  constructor(private _citasService: CitasService) {
+  // Se almacenan configuraciones.
+  permitirBorrarCitasEnInicio: boolean = false;
+
+  constructor(
+    private _configuracionService: ConfiguracionService,
+    private _citasService: CitasService
+  ) {
     // Registrar iconos.
     addIcons({
       settingsOutline,
@@ -61,7 +68,21 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     // Al momento de inicializar la página se llama al servicio de citas para que se inicialice.
     await this._citasService.initPlugin();
-    // Obtiene una cita aleatoria desde el servicio.
+    await this.ionViewWillEnter();
+  }
+
+  async ionViewWillEnter() {
+    // Obtiene el valor de las configuraciones al momento de entrar a la página.
+    this.permitirBorrarCitasEnInicio =
+      await this._configuracionService.permitirBorrarCitasEnInicio();
+    // Obtiene una cita aleatoria desde el servicio al momento de entrar a la página.
+    // Solamente se llama si el servicio de citas ya fue inicializado.
+    if (!this._citasService.inicializado) return;
     this.randomCita = await this._citasService.getRandomCita();
+  }
+
+  async onCitaElimina(): Promise<void> {
+    // Función que se llama cuándo el componente hijo (cita aleatoria) hace eliminación.
+    await this.ionViewWillEnter();
   }
 }

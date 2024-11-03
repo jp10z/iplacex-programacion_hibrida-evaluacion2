@@ -14,7 +14,13 @@
 <ion-content [fullscreen]="true">
 
     <ng-content *ngIf="randomCita !== null">
-        <app-cita [frase]="randomCita.frase" [autor]="randomCita.autor"></app-cita>
+        <app-cita
+          [id]="randomCita.id"
+          [frase]="randomCita.frase"
+          [autor]="randomCita.autor"
+          [permitirBorrarCitasEnInicio]="permitirBorrarCitasEnInicio"
+          (onCitaEliminadaEvent)="onCitaElimina()"
+        ></app-cita>
     </ng-content>
 
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">

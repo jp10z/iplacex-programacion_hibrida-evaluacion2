@@ -1,11 +1,16 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import {
   IonCard,
   IonCardContent,
   IonCardSubtitle,
   IonCardHeader,
+  IonButton,
+  IonIcon,
 } from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import { trashOutline } from "ionicons/icons";
+import { CitasService } from "src/app/servicios/citas.service";
 
 @Component({
   selector: "app-cita",
@@ -13,6 +18,8 @@ import {
   styleUrls: ["./cita.component.scss"],
   standalone: true,
   imports: [
+    IonButton,
+    IonIcon,
     IonCardHeader,
     IonCardSubtitle,
     CommonModule,
@@ -23,13 +30,25 @@ import {
   ],
 })
 export class CitaComponent implements OnInit {
-  // Inputs del componente
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  @Output() onCitaEliminadaEvent = new EventEmitter();
+
+  // Inputs del componente.
+  @Input() permitirBorrarCitasEnInicio: boolean = false;
+  @Input() id: number = -1;
   @Input() frase: string = "";
   @Input() autor: string = "";
 
-  constructor() {}
+  constructor(private _citasService: CitasService) {}
 
-  ngOnInit() {
-    console.log("Component cita ngOnInit");
+  async ngOnInit() {
+    // Inicializa los iconos.
+    addIcons({ trashOutline });
+  }
+
+  async deleteCita() {
+    // Elimina una cita y lanza señal para informar al padre.
+    await this._citasService.deleteCita(this.id);
+    this.onCitaEliminadaEvent.emit();
   }
 }

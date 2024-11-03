@@ -11,6 +11,7 @@ import { Capacitor } from "@capacitor/core";
   providedIn: "root",
 })
 export class CitasService {
+  inicializado: boolean = false;
   private sqliteConnection: SQLiteConnection = new SQLiteConnection(
     CapacitorSQLite
   );
@@ -40,12 +41,14 @@ export class CitasService {
   }
 
   async initPlugin() {
+    if (this.inicializado) return;
     this.platform = Capacitor.getPlatform();
     if (this.platform === "web") {
       await this._initPluginWeb();
     }
     await this._openConnection();
     await this._initDatabase();
+    this.inicializado = true;
   }
 
   private async _openConnection() {

@@ -5,5 +5,8 @@
   <ion-card-header>
     <ion-card-subtitle>{{autor}}</ion-card-subtitle>
   </ion-card-header>
+  <ion-button fill="clear" size="large" (click)="deleteCita()" *ngIf="permitirBorrarCitasEnInicio">
+    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+  </ion-button>
   
 </ion-card>
