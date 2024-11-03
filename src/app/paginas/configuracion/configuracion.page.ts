@@ -11,6 +11,8 @@ import {
   IonList,
   IonItem,
   ToggleChangeEventDetail,
+  IonBackButton,
+  IonButtons,
 } from "@ionic/angular/standalone";
 import { IonToggleCustomEvent } from "@ionic/core";
 import { ConfiguracionService } from "src/app/servicios/configuracion.service";
@@ -21,6 +23,8 @@ import { ConfiguracionService } from "src/app/servicios/configuracion.service";
   styleUrls: ["./configuracion.page.scss"],
   standalone: true,
   imports: [
+    IonButtons,
+    IonBackButton,
     IonItem,
     IonList,
     IonLabel,

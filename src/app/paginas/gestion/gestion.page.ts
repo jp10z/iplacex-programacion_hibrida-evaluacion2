@@ -7,6 +7,8 @@ import {
   IonTitle,
   IonToolbar,
   IonToast,
+  IonButtons,
+  IonBackButton,
 } from "@ionic/angular/standalone";
 import { CrearCitaComponent } from "../../componentes/crear-cita/crear-cita.component";
 import { ListaCitasComponent } from "../../componentes/lista-citas/lista-citas.component";
@@ -19,6 +21,8 @@ import { CitasService } from "src/app/servicios/citas.service";
   styleUrls: ["./gestion.page.scss"],
   standalone: true,
   imports: [
+    IonBackButton,
+    IonButtons,
     IonToast,
     IonContent,
     IonHeader,
