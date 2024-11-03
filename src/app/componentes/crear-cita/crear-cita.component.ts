@@ -14,6 +14,8 @@ import {
   IonIcon,
   IonText,
 } from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import { addOutline } from "ionicons/icons";
 
 @Component({
   selector: "app-crear-cita",
@@ -40,7 +42,9 @@ export class CrearCitaComponent implements OnInit {
   frase: string = "";
   autor: string = "";
 
-  constructor() {}
+  constructor() {
+    addIcons({ addOutline });
+  }
 
   ngOnInit() {}
 }
