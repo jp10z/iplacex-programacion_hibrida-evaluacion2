@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import {
   IonItem,
   IonLabel,
@@ -20,13 +20,11 @@ import { trashOutline } from "ionicons/icons";
   imports: [IonIcon, CommonModule, IonItem, IonLabel, IonList, IonButton],
 })
 export class ListaCitasComponent implements OnInit {
-  citas: Cita[] = [];
+  @Input() citas: Cita[] = [];
 
   constructor(private _citasService: CitasService) {
     addIcons({ trashOutline });
   }
 
-  ngOnInit() {
-    this.citas = this._citasService.getCitas();
-  }
+  ngOnInit() {}
 }

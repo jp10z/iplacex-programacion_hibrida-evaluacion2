@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import {
@@ -9,6 +9,8 @@ import {
 } from "@ionic/angular/standalone";
 import { CrearCitaComponent } from "../../componentes/crear-cita/crear-cita.component";
 import { ListaCitasComponent } from "../../componentes/lista-citas/lista-citas.component";
+import { Cita } from "src/app/modelo/cita";
+import { CitasService } from "src/app/servicios/citas.service";
 
 @Component({
   selector: "app-gestion",
@@ -27,7 +29,22 @@ import { ListaCitasComponent } from "../../componentes/lista-citas/lista-citas.c
   ],
 })
 export class GestionPage implements OnInit {
-  constructor() {}
+  citas: Cita[] = [];
 
-  ngOnInit() {}
+  constructor(private _citasService: CitasService) {}
+
+  ngOnInit() {
+    this.loadCitas();
+  }
+
+  loadCitas() {
+    // Función que carga el listado de citas desde el servicio
+    this.citas = this._citasService.getCitas();
+  }
+
+  onCitasChange() {
+    // Función llamada cuándo algún hijo emita un evento de creación o eliminación de citas.
+    // Esto recargará el listado de citas desde el servicio.
+    this.loadCitas();
+  }
 }

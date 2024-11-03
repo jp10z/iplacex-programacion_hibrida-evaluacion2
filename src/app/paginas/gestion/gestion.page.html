@@ -11,6 +11,6 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-crear-cita></app-crear-cita>
-  <app-lista-citas></app-lista-citas>
+  <app-crear-cita (onCitaCreadaEvent)="onCitasChange()"></app-crear-cita>
+  <app-lista-citas [citas]="citas"></app-lista-citas>
 </ion-content>
