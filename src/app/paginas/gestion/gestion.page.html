@@ -12,5 +12,5 @@
   </ion-header>
 
   <app-crear-cita (onCitaCreadaEvent)="onCitasChange()"></app-crear-cita>
-  <app-lista-citas [citas]="citas"></app-lista-citas>
+  <app-lista-citas [citas]="citas" (onCitaEliminadaEvent)="onCitasChange()"></app-lista-citas>
 </ion-content>

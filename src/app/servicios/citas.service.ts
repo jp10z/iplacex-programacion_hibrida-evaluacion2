@@ -46,4 +46,9 @@ export class CitasService {
     // Returna el elemento en esa posición
     return this._citas[randomIndex];
   }
+
+  deleteCita(index: number) {
+    // Elimina una cita según el indice especificado
+    this._citas.splice(index, 1);
+  }
 }

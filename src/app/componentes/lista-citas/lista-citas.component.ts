@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import {
   IonItem,
   IonLabel,
@@ -20,6 +20,8 @@ import { trashOutline } from "ionicons/icons";
   imports: [IonIcon, CommonModule, IonItem, IonLabel, IonList, IonButton],
 })
 export class ListaCitasComponent implements OnInit {
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  @Output() onCitaEliminadaEvent = new EventEmitter();
   @Input() citas: Cita[] = [];
 
   constructor(private _citasService: CitasService) {
@@ -27,4 +29,9 @@ export class ListaCitasComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  deleteCita(index: number) {
+    this._citasService.deleteCita(index);
+    this.onCitaEliminadaEvent.emit();
+  }
 }
