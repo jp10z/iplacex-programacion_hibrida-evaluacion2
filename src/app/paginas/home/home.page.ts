@@ -12,8 +12,10 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
+  IonFab,
+  IonFabButton,
 } from "@ionic/angular/standalone";
-import { settingsOutline } from "ionicons/icons";
+import { settingsOutline, addOutline } from "ionicons/icons";
 import { CitaComponent } from "../../componentes/cita/cita.component";
 import { CitasService } from "src/app/servicios/citas.service";
 import { Cita } from "src/app/modelo/cita";
@@ -26,6 +28,8 @@ import { addIcons } from "ionicons";
   styleUrls: ["home.page.scss"],
   standalone: true,
   imports: [
+    IonFab,
+    IonFabButton,
     RouterModule,
     IonIcon,
     IonButton,
@@ -48,6 +52,7 @@ export class HomePage implements OnInit {
   constructor(private _citasService: CitasService) {
     addIcons({
       settingsOutline,
+      addOutline,
     });
   }
 

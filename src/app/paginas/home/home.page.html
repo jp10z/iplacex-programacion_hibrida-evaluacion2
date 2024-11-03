@@ -4,7 +4,7 @@
         Citas
       </ion-title>
       <ion-buttons slot="end">
-        <ion-button [routerLink]="['/gestion']">
+        <ion-button [routerLink]="['/configuracion']">
           <ion-icon icon="settings-outline" slot="icon-only" />
         </ion-button>
       </ion-buttons>
@@ -16,6 +16,12 @@
     <ng-content *ngIf="randomCita !== null">
         <app-cita [frase]="randomCita.frase" [autor]="randomCita.autor"></app-cita>
     </ng-content>
+
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button [routerLink]="['/gestion']">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
     
 
 </ion-content>
