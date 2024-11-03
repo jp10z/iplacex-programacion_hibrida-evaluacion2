@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>
+        Citas
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button [routerLink]="['/gestion']">
+          <ion-icon icon="settings-outline" slot="icon-only" />
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content [fullscreen]="true">
+
+    <ng-content *ngIf="randomCita !== null">
+        <app-cita [frase]="randomCita.frase" [autor]="randomCita.autor"></app-cita>
+    </ng-content>
+    
+
+</ion-content>
